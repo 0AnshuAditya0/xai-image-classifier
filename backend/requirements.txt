@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 torch
 torchvision
 captum
@@ -9,3 +10,16 @@ uvicorn[standard]
 python-multipart
 sqlalchemy
 pydantic
+=======
+torch
+torchvision
+captum
+Pillow
+matplotlib
+numpy
+fastapi
+uvicorn[standard]
+python-multipart
+sqlalchemy
+pydantic
+>>>>>>> 95fbb696c2bff2b497d717df118dc68761b9836f
