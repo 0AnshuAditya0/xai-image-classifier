@@ -314,4 +314,5 @@ with gr.Blocks(css=custom_css, theme=gr.themes.Base(), title="XAI Image Classifi
     predict_btn.click(fn=predict_and_explain, inputs=[input_image], outputs=[output_text, output_image, detailed_heatmap])
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.queue()
+    demo.launch(server_name="0.0.0.0", server_port=7860)
