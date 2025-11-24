@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -320,4 +320,4 @@ async def get_history(user_email: str, db: Session = Depends(get_db)):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=7860, reload=True)
->>>>>>> 95fbb696c2bff2b497d717df118dc68761b9836f
+
