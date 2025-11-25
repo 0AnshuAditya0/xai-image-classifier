@@ -10,7 +10,7 @@ export async function classifyImage(file, userEmail = null) {
   }
 
   try {
-    const response = await axios.post(`${API_URL}/api/classify`, formData, {
+    const response = await axios.post(`${API_URL}/classify`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -32,7 +32,7 @@ export async function classifyImage(file, userEmail = null) {
 
 export async function submitFeedback(analysisId, isCorrect, correctedLabel = null) {
   try {
-    await axios.post(`${API_URL}/api/feedback`, {
+    await axios.post(`${API_URL}/feedback`, {
       analysis_id: analysisId,
       is_correct: isCorrect,
       corrected_label: correctedLabel
@@ -44,7 +44,7 @@ export async function submitFeedback(analysisId, isCorrect, correctedLabel = nul
 
 export async function getHistory(userEmail) {
   try {
-    const response = await axios.get(`${API_URL}/api/history`, {
+    const response = await axios.get(`${API_URL}/history`, {
       params: { user_email: userEmail }
     });
     return response.data;
