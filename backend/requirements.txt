@@ -1,4 +1,3 @@
-
 torch
 torchvision
 captum
@@ -10,15 +9,3 @@ uvicorn[standard]
 python-multipart
 sqlalchemy
 pydantic
-torch
-torchvision
-captum
-Pillow
-matplotlib
-numpy
-fastapi
-uvicorn[standard]
-python-multipart
-sqlalchemy
-pydantic
-
