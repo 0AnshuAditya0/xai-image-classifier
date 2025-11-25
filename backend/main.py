@@ -63,6 +63,7 @@ async def root():
     return {"message": "XAI Image Classifier API", "status": "running"}
 
 @app.get("/health")
+@app.head("/health")
 async def health_check():
     return {"status": "healthy", "model_loaded": classifier.model is not None}
 
