@@ -3,193 +3,89 @@
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState } from 'react';
-import { Moon, Sun, Menu, X, Layers } from 'lucide-react';
-import { useTheme } from './ThemeProvider';
 
 export default function Navbar({ onAuthClick }) {
     const { data: session } = useSession();
-    const { theme, toggleTheme } = useTheme();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    const scrollToSection = (id) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-            setMobileMenuOpen(false);
-        }
-    };
-
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-[#0f172a] border-b border-gray-200 dark:border-white/5 transition-colors duration-300">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-20">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center space-x-3 group">
-                        <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
-                            <Layers className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-                            XAI Classifier
-                        </span>
+        <nav className="fixed top-0 left-0 w-full h-16 border-b border-[#1E293B] z-50 bg-[#0A0A0A] flex justify-between items-center px-8 transition-none">
+            <div className="flex items-center gap-8">
+                <Link href="/" className="text-xl font-semibold tracking-tighter text-white uppercase flex items-center gap-2 transition-none hover:text-[#3B82F6]">
+                    XAI Classifier
+                </Link>
+                <div className="hidden md:flex gap-6">
+                    <Link href="/classifier" className="text-[#919191] font-bold text-sm tracking-wide hover:text-white transition-none">
+                        DASHBOARD
                     </Link>
+                    <Link href="/#features" className="text-[#919191] font-normal text-sm tracking-wide hover:text-white transition-none">
+                        CAPABILITIES
+                    </Link>
+                    <Link href="/#how-it-works" className="text-[#919191] font-normal text-sm tracking-wide hover:text-white transition-none">
+                        ARCHITECTURE
+                    </Link>
+                </div>
+            </div>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center space-x-8">
-                        <Link
-                            href="/"
-                            className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors font-medium text-sm"
-                        >
-                            Home
+            <div className="flex items-center gap-4">
+                {session ? (
+                    <div className="hidden md:flex items-center gap-4">
+                        <Link href="/history" className="text-[#919191] font-normal text-[11px] tracking-widest uppercase hover:text-white transition-none">
+                            History
                         </Link>
-                        <Link
-                            href="/#features"
-                            className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors font-medium text-sm"
-                        >
-                            Features
-                        </Link>
-                        <Link
-                            href="/#how-it-works"
-                            className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors font-medium text-sm"
-                        >
-                            Docs
-                        </Link>
-                        <Link
-                            href="/classifier"
-                            className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors font-medium text-sm"
-                        >
-                            Classify
-                        </Link>
-                    </div>
-
-                    {/* Right Section: Theme Toggle + Auth */}
-                    <div className="hidden md:flex items-center space-x-6">
-                        {/* Theme Toggle */}
-                        <button
-                            onClick={toggleTheme}
-                            className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white transition-colors"
-                            aria-label="Toggle theme"
-                        >
-                            {theme === 'dark' ? (
-                                <Sun className="w-5 h-5" />
-                            ) : (
-                                <Moon className="w-5 h-5" />
-                            )}
+                        <div className="flex items-center gap-3 px-3 py-1 border border-[#1E293B] bg-[#111111]">
+                            <span className="material-symbols-outlined text-[#3B82F6] text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>person</span>
+                            <span className="text-[10px] font-bold text-white tracking-widest uppercase">
+                                {session.user?.name || 'USER'}
+                            </span>
+                        </div>
+                        <button onClick={() => signOut()} className="text-[#919191] hover:text-red-500 transition-none flex items-center">
+                            <span className="material-symbols-outlined text-lg">logout</span>
                         </button>
+                    </div>
+                ) : (
+                    <button onClick={onAuthClick} className="hidden md:flex text-white bg-[#111111] border border-[#1E293B] hover:border-[#3B82F6] hover:bg-[#3B82F6]/10 px-4 py-1 flex items-center justify-center transition-none gap-2">
+                        <span className="material-symbols-outlined text-[14px]">login</span>
+                        <span className="text-[10px] font-bold tracking-widest uppercase">Initialize Session</span>
+                    </button>
+                )}
 
-                        {/* Auth Section */}
+                <div className="md:hidden flex items-center">
+                    <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-[#919191] hover:text-white transition-none flex items-center">
+                        <span className="material-symbols-outlined text-2xl">{mobileMenuOpen ? 'close' : 'menu'}</span>
+                    </button>
+                </div>
+            </div>
+
+            {mobileMenuOpen && (
+                <div className="absolute top-16 left-0 w-full bg-[#0A0A0A] border-b border-[#1E293B] flex shadow-2xl z-40 md:hidden">
+                    <div className="flex flex-col w-full p-4 gap-2">
+                        <Link href="/classifier" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 text-[#919191] hover:text-white hover:bg-[#111111] text-sm tracking-widest uppercase transition-none">
+                            Dashboard
+                        </Link>
+                        <Link href="/#features" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 text-[#919191] hover:text-white hover:bg-[#111111] text-sm tracking-widest uppercase transition-none">
+                            Capabilities
+                        </Link>
+                        <Link href="/#how-it-works" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 text-[#919191] hover:text-white hover:bg-[#111111] text-sm tracking-widest uppercase transition-none">
+                            Architecture
+                        </Link>
                         {session ? (
-                            <div className="flex items-center space-x-4">
-                                <Link
-                                    href="/history"
-                                    className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white font-medium text-sm"
-                                >
-                                    History
+                            <>
+                                <Link href="/history" onClick={() => setMobileMenuOpen(false)} className="px-4 py-3 text-[#919191] hover:text-white hover:bg-[#111111] text-sm tracking-widest uppercase transition-none">
+                                    History Log
                                 </Link>
-                                {/* User Profile Display */}
-                                <div className="flex items-center space-x-3 px-3 py-1.5 bg-gray-100 dark:bg-slate-800 rounded-lg">
-                                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                        {session.user?.name?.charAt(0).toUpperCase() || session.user?.email?.charAt(0).toUpperCase() || 'U'}
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                                            {session.user?.name || 'User'}
-                                        </span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                                            {session.user?.email}
-                                        </span>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => signOut()}
-                                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition-all duration-300 text-sm"
-                                >
-                                    Sign Out
+                                <button onClick={() => { signOut(); setMobileMenuOpen(false); }} className="px-4 py-3 text-red-500 hover:bg-red-950/20 text-sm tracking-widest uppercase text-left transition-none">
+                                    Terminate Session
                                 </button>
-                            </div>
+                            </>
                         ) : (
-                            <button
-                                onClick={onAuthClick}
-                                className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-md transition-all duration-300 text-sm"
-                            >
-                                Sign In
+                            <button onClick={() => { onAuthClick(); setMobileMenuOpen(false); }} className="mt-2 w-full text-white bg-[#111111] border border-[#1E293B] hover:border-[#3B82F6] px-4 py-3 text-sm tracking-widest uppercase transition-none">
+                                Initialize Session
                             </button>
                         )}
                     </div>
-
-                    {/* Mobile Menu Button */}
-                    <div className="md:hidden flex items-center space-x-4">
-                        <button
-                            onClick={toggleTheme}
-                            className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-white"
-                        >
-                            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                        </button>
-                        <button
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="text-gray-900 dark:text-white"
-                        >
-                            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                        </button>
-                    </div>
                 </div>
-
-                {/* Mobile Menu */}
-                {mobileMenuOpen && (
-                    <div className="md:hidden py-4 border-t border-gray-200 dark:border-white/10 bg-white dark:bg-[#0f172a]">
-                        <div className="flex flex-col space-y-4">
-                            <Link
-                                href="/"
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors font-medium"
-                                onClick={() => setMobileMenuOpen(false)}
-                            >
-                                Home
-                            </Link>
-                            <button
-                                onClick={() => scrollToSection('features')}
-                                className="text-left text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors font-medium"
-                            >
-                                Features
-                            </button>
-                            <Link
-                                href="#"
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors font-medium"
-                            >
-                                Docs
-                            </Link>
-                            <Link
-                                href="/classifier"
-                                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors font-medium"
-                            >
-                                Classify
-                            </Link>
-                            {session ? (
-                                <>
-                                    <Link
-                                        href="/history"
-                                        className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition-colors font-medium"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        History
-                                    </Link>
-                                    <button
-                                        onClick={() => signOut()}
-                                        className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md text-left w-full"
-                                    >
-                                        Sign Out
-                                    </button>
-                                </>
-                            ) : (
-                                <button
-                                    onClick={onAuthClick}
-                                    className="px-6 py-2 bg-blue-500 text-white font-bold rounded-md w-full"
-                                >
-                                    Sign In
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                )}
-            </div>
+            )}
         </nav>
     );
 }

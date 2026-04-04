@@ -3,13 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { ChevronRight, Sparkles, Trash2, Zap, Grid, Eye, BarChart3 } from 'lucide-react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import AuthModal from '../components/AuthModal';
-import UsageLimitBanner from '../components/UsageLimitBanner';
 import ImageUpload from '../components/ImageUpload';
-import ImagePreview from '../components/ImagePreview';
 import AnalysisProgress from '../components/AnalysisProgress';
 import EnhancedResults from '../components/EnhancedResults';
 import { classifyImage } from '../lib/api';
@@ -26,6 +20,7 @@ export default function ClassifierPage() {
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [enableAttack, setEnableAttack] = useState(false);
 
     const handleImageSelect = async (file) => {
         setSelectedImage(file);
@@ -67,7 +62,7 @@ export default function ClassifierPage() {
 
         try {
             const userEmail = session?.user?.email;
-            const data = await classifyImage(selectedImage, userEmail);
+            const data = await classifyImage(selectedImage, userEmail, enableAttack);
             setResult(data);
 
             if (!session) {
@@ -87,6 +82,7 @@ export default function ClassifierPage() {
         setValidationErrors([]);
         setResult(null);
         setError(null);
+        setEnableAttack(false);
     };
 
     const handleCancelAnalysis = () => {
@@ -94,145 +90,110 @@ export default function ClassifierPage() {
         setError('Analysis cancelled');
     };
 
-    // Show results view
-    if (result && !loading) {
-        return (
-            <div className="min-h-screen bg-white dark:bg-[#0f172a] text-gray-900 dark:text-white transition-colors duration-300">
-                <Navbar onAuthClick={() => setShowAuthModal(true)} />
-                <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+    return (
+        <div className="antialiased bg-[#0A0A0A] text-white selection:bg-[#005ac2] selection:text-white min-h-screen font-body relative">
+            <nav className="fixed top-0 w-full h-16 border-b border-[#1E293B] z-50 bg-[#0A0A0A] flex justify-between items-center px-8">
+                <div className="flex items-center gap-8">
+                    <Link href="/" className="text-xl font-semibold tracking-tighter text-white uppercase flex items-center gap-2">
+                        XAI Classifier
+                    </Link>
+                    <div className="hidden md:flex gap-6">
+                        <span className="text-[#3B82F6] font-bold text-sm tracking-wide">Model: ResNet152</span>
+                        <span className="text-[#919191] font-normal text-sm tracking-wide hover:text-white transition-none cursor-default">API: Connected</span>
+                    </div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <button className="text-[#919191] hover:text-white transition-none flex items-center">
+                        <span className="material-symbols-outlined" data-icon="settings">settings</span>
+                    </button>
+                    <button className="text-[#919191] hover:text-white transition-none flex items-center">
+                        <span className="material-symbols-outlined" data-icon="account_circle">{session ? "account_circle" : "login"}</span>
+                    </button>
+                </div>
+            </nav>
 
-                <div className="pt-28 pb-16">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <EnhancedResults
+
+            <div className="fixed top-16 left-0 w-full h-[1px] bg-[#3B82F6] opacity-30 z-40 pointer-events-none shadow-[0_0_10px_#3B82F6]"></div>
+
+            <main className="pt-16 min-h-screen bg-[#0A0A0A] relative z-10">
+                <div className="max-w-7xl mx-auto p-8 lg:p-12">
+                    <section className="mb-12">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                            <div className="space-y-2">
+                                <div className="inline-flex items-center px-2 py-1 border border-[#3B82F6] bg-[#3B82F6]/5 mb-4">
+                                    <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">ResNet152 + Grad-CAM</span>
+                                </div>
+                                <h1 className="text-5xl md:text-7xl font-semibold tracking-[-0.04em] text-white leading-tight">
+                                    XAI Image <br/>Classification.
+                                </h1>
+                            </div>
+                            <div className="flex flex-col gap-4">
+                                <div className="flex items-center justify-between p-4 bg-[#111111] border border-[#1E293B] min-w-[280px]">
+                                    <span className="text-[11px] font-medium text-slate-400 tracking-wider uppercase">Enable FGSM Adversarial Attack</span>
+                                    <div className="relative inline-block w-10 h-5 align-middle select-none">
+                                        <input type="checkbox" className="sr-only" id="toggle" checked={enableAttack} onChange={() => setEnableAttack(!enableAttack)} />
+                                        <label htmlFor="toggle" className={`block h-5 cursor-pointer transition-none ${enableAttack ? 'bg-[#3B82F6]' : 'bg-[#1E293B]'}`}></label>
+                                        <div className={`absolute top-1 left-1 bg-white w-3 h-3 transition-none transform ${enableAttack ? 'translate-x-5' : ''}`}></div>
+                                    </div>
+                                </div>
+                                {enableAttack && (
+                                    <div className="flex items-center gap-3 p-3 border border-red-900/50 bg-red-950/10">
+                                        <span className="material-symbols-outlined text-red-500 text-sm" data-icon="warning">warning</span>
+                                        <span className="text-[10px] text-red-400 font-medium tracking-wide uppercase">Adversarial layer active</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </section>
+
+                    {error && (
+                        <div className="mb-8 p-4 border border-red-900/50 bg-red-950/20 flex flex-col items-center justify-center">
+                            <p className="text-red-500 text-sm font-bold tracking-widest uppercase mb-4 text-center">{error}</p>
+                            <button onClick={handleClear} className="px-6 py-2 bg-red-900/40 border border-red-500/50 text-red-400 text-[10px] tracking-widest uppercase font-bold hover:bg-red-800/50 transition-none">
+                                Reset System
+                            </button>
+                        </div>
+                    )}
+
+                    {loading ? (
+                        <div className="w-full flex justify-center py-20">
+                            <AnalysisProgress onCancel={handleCancelAnalysis} />
+                        </div>
+                    ) : result ? (
+                        <EnhancedResults 
                             result={result}
                             imagePreview={imagePreview}
                             imageMetadata={imageMetadata}
                             onBack={handleClear}
                             onAnalyzeAnother={handleClear}
                         />
-                    </div>
-                </div>
-
-                <Footer />
-            </div>
-        );
-    }
-
-    return (
-        <div className="min-h-screen bg-white dark:bg-[#0f172a] text-gray-900 dark:text-white font-sans transition-colors duration-300">
-            <Navbar onAuthClick={() => setShowAuthModal(true)} />
-            <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
-
-            <div className="pt-32 pb-16">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {/* Breadcrumb */}
-                    <div className="mb-8 flex items-center text-sm text-gray-500 dark:text-gray-400">
-                        <Link href="/" className="hover:text-blue-600 dark:hover:text-white transition-colors">
-                            Home
-                        </Link>
-                        <span className="mx-2">/</span>
-                        <span className="text-gray-900 dark:text-white font-medium">Classifier</span>
-                    </div>
-
-                    <UsageLimitBanner
-                        session={session}
-                        onSignInClick={() => setShowAuthModal(true)}
-                    />
-
-                    {loading ? (
-                        <AnalysisProgress onCancel={handleCancelAnalysis} />
                     ) : (
-                        <div className="mb-12">
-                            {selectedImage && imageMetadata ? (
-                                <div className="bg-white dark:bg-slate-800 p-8 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm dark:shadow-none">
-                                    <ImagePreview
-                                        file={selectedImage}
-                                        metadata={imageMetadata}
-                                        errors={validationErrors}
-                                        onRemove={handleClear}
-                                    />
+                        <>
+                            <ImageUpload
+                                onImageSelect={handleImageSelect}
+                                preview={imagePreview}
+                            />
 
-                                    <div className="mt-6 flex gap-4">
-                                        <button
-                                            onClick={handleAnalyze}
-                                            disabled={validationErrors.length > 0}
-                                            className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-md transition-all duration-300 flex items-center justify-center gap-2 shadow-md"
-                                        >
-                                            <Sparkles className="w-5 h-5" />
-                                            <span>Analyze Image</span>
-                                        </button>
-
-                                        <button
-                                            onClick={handleClear}
-                                            className="px-6 py-3 bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-white font-semibold rounded-md transition-all flex items-center gap-2"
-                                        >
-                                            <Trash2 className="w-5 h-5" />
-                                        </button>
-                                    </div>
-
-                                    {validationErrors.length > 0 && (
-                                        <p className="text-xs text-red-500 dark:text-red-400 text-center mt-3">
-                                            Please fix validation errors before analyzing
-                                        </p>
-                                    )}
+                            {selectedImage && !validationErrors.length && (
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={handleAnalyze}
+                                        className={`flex-1 px-6 py-4 border transition-none font-bold text-xs tracking-widest uppercase ${enableAttack ? 'bg-red-600 border-red-500 hover:bg-red-700 hover:border-red-400 text-white' : 'bg-[#3B82F6] border-[#2563EB] hover:bg-[#2563EB] hover:border-[#1D4ED8] text-white'}`}
+                                    >
+                                        {enableAttack ? 'Execute Analysis' : 'Analyze Image'}
+                                    </button>
                                 </div>
-                            ) : error ? (
-                                <div className="text-center py-12">
-                                    <div className="bg-red-50 dark:bg-slate-800 border-l-4 border-red-500 p-6 rounded-lg max-w-md mx-auto shadow-sm dark:shadow-none">
-                                        <p className="text-red-600 dark:text-red-400 font-medium mb-4">⚠️ {error}</p>
-                                        <button
-                                            onClick={handleClear}
-                                            className="px-6 py-2.5 bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400 font-semibold rounded-lg transition-colors"
-                                        >
-                                            Try Again
-                                        </button>
-                                    </div>
-                                </div>
-                            ) : (
-                                <>
-                                    <ImageUpload
-                                        onImageSelect={handleImageSelect}
-                                        preview={imagePreview}
-                                    />
-
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-12">
-                                        <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-lg border border-gray-200 dark:border-slate-700/50 hover:shadow-md dark:hover:shadow-none transition-shadow">
-                                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
-                                                <Zap className="w-5 h-5 text-blue-600 dark:text-blue-500" />
-                                            </div>
-                                            <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Fast Analysis</h4>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">GPU-accelerated</p>
-                                        </div>
-                                        <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-lg border border-gray-200 dark:border-slate-700/50 hover:shadow-md dark:hover:shadow-none transition-shadow">
-                                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
-                                                <Grid className="w-5 h-5 text-blue-600 dark:text-blue-500" />
-                                            </div>
-                                            <h4 className="font-semibold text-gray-900 dark:text-white mb-1">1000 Categories</h4>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">ImageNet classes</p>
-                                        </div>
-                                        <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-lg border border-gray-200 dark:border-slate-700/50 hover:shadow-md dark:hover:shadow-none transition-shadow">
-                                            <div className="w-10 h-10 bg-orange-100 dark:bg-orange-500/10 rounded-lg flex items-center justify-center mb-4">
-                                                <Eye className="w-5 h-5 text-orange-600 dark:text-orange-500" />
-                                            </div>
-                                            <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Explainable AI</h4>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">Grad-CAM heatmaps</p>
-                                        </div>
-                                        <div className="bg-gray-50 dark:bg-slate-800 p-6 rounded-lg border border-gray-200 dark:border-slate-700/50 hover:shadow-md dark:hover:shadow-none transition-shadow">
-                                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
-                                                <BarChart3 className="w-5 h-5 text-orange-600 dark:text-orange-500" />
-                                            </div>
-                                            <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Top 5 Results</h4>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">With confidence</p>
-                                        </div>
-                                    </div>
-                                </>
                             )}
-                        </div>
+
+                            {validationErrors.length > 0 && (
+                                <div className="mt-4 p-4 border border-red-500 bg-red-500/10">
+                                    <p className="text-[10px] font-bold tracking-widest uppercase text-red-500 text-center">Neural Failure: Invalid Source Entity</p>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
-            </div>
-
-            <Footer />
+            </main>
         </div>
     );
 }

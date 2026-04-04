@@ -1,7 +1,6 @@
-// Usage limiting utilities
-export const USAGE_LIMIT = 3;
+export const USAGE_LIMIT = 99999;
 export const USAGE_KEY = 'xai_usage_count';
-export const MAX_FREE_ATTEMPTS = 3;
+export const MAX_FREE_ATTEMPTS = 99999;
 
 export function getUsageCount() {
   if (typeof window === 'undefined') return 0;
@@ -16,7 +15,7 @@ export function incrementUsageCount() {
 }
 
 export function hasReachedLimit() {
-  return getUsageCount() >= MAX_FREE_ATTEMPTS;
+  return false;
 }
 
 export function getRemainingAttempts() {

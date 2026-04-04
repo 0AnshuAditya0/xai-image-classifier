@@ -1,102 +1,87 @@
 'use client';
 
 import Link from 'next/link';
-import { Github, Mail, Twitter, Layers } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="bg-[#0f172a] border-t border-white/10 pt-20 pb-10">
-            <div className="max-w-7xl mx-auto px-4">
+        <footer className="bg-[#0A0A0A] border-t border-[#1E293B] pt-20 pb-10">
+            <div className="max-w-7xl mx-auto px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                    {/* Brand */}
                     <div className="md:col-span-2">
                         <div className="flex items-center space-x-3 mb-6">
-                            <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
-                                <Layers className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="text-xl font-bold text-white tracking-tight">
+                            <Link href="/" className="text-xl font-semibold tracking-tighter text-white uppercase flex items-center gap-2 transition-none hover:text-[#3B82F6]">
                                 XAI Classifier
-                            </span>
+                            </Link>
                         </div>
-                        <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-md">
-                            AI-powered image classification with explainable AI visualizations.
-                            Built with ResNet152 and Grad-CAM for transparent, trustworthy decision-making.
+                        <p className="text-[#919191] text-[11px] uppercase tracking-widest leading-loose max-w-md mb-8">
+                            AI-powered image classification with explainable AI visualizations. Built with ResNet152 and Grad-CAM for transparent, trustworthy decision-making.
                         </p>
                         <div className="flex space-x-4">
                             <a
                                 href="https://github.com/0AnshuAditya0/xai-image-classifier"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-10 h-10 bg-slate-800 rounded flex items-center justify-center hover:bg-blue-500 transition-colors duration-300 group"
+                                className="w-10 h-10 border border-[#1E293B] bg-[#111111] flex items-center justify-center hover:bg-[#3B82F6] hover:border-[#3B82F6] hover:text-white text-[#919191] transition-none"
                             >
-                                <Github className="w-5 h-5 text-gray-400 group-hover:text-white" />
+                                <span className="text-[10px] font-bold tracking-widest uppercase">GIT</span>
                             </a>
                             <a
                                 href="mailto:contact@xai-classifier.com"
-                                className="w-10 h-10 bg-slate-800 rounded flex items-center justify-center hover:bg-blue-500 transition-colors duration-300 group"
+                                className="w-10 h-10 border border-[#1E293B] bg-[#111111] flex items-center justify-center hover:bg-[#3B82F6] hover:border-[#3B82F6] hover:text-white text-[#919191] transition-none"
                             >
-                                <Mail className="w-5 h-5 text-gray-400 group-hover:text-white" />
-                            </a>
-                            <a
-                                href="#"
-                                className="w-10 h-10 bg-slate-800 rounded flex items-center justify-center hover:bg-blue-500 transition-colors duration-300 group"
-                            >
-                                <Twitter className="w-5 h-5 text-gray-400 group-hover:text-white" />
+                                <span className="material-symbols-outlined text-[16px]">mail</span>
                             </a>
                         </div>
                     </div>
 
-                    {/* Quick Links */}
                     <div>
-                        <h4 className="text-white font-semibold mb-6">Quick Links</h4>
+                        <h4 className="text-white text-[10px] font-bold tracking-widest uppercase mb-6">System Links</h4>
                         <div className="flex flex-col space-y-4">
-                            <Link href="/" className="text-gray-400 hover:text-white transition-colors text-sm">
-                                Home
+                            <Link href="/" className="text-[#919191] text-[11px] font-medium tracking-widest uppercase hover:text-[#3B82F6] transition-none">
+                                Matrix
                             </Link>
-                            <Link href="/classifier" className="text-gray-400 hover:text-white transition-colors text-sm">
-                                Try Classifier
+                            <Link href="/classifier" className="text-[#919191] text-[11px] font-medium tracking-widest uppercase hover:text-[#3B82F6] transition-none">
+                                Initialization
                             </Link>
                             <a
                                 href="https://github.com/0AnshuAditya0/xai-image-classifier"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-gray-400 hover:text-white transition-colors text-sm"
+                                className="text-[#919191] text-[11px] font-medium tracking-widest uppercase hover:text-[#3B82F6] transition-none"
                             >
-                                GitHub
+                                Source Logic
                             </a>
                             <a
                                 href="#"
-                                className="text-gray-400 hover:text-white transition-colors text-sm"
+                                className="text-[#919191] text-[11px] font-medium tracking-widest uppercase hover:text-[#3B82F6] transition-none"
                             >
-                                Documentation
+                                Architecture
                             </a>
                         </div>
                     </div>
 
-                    {/* Resources */}
                     <div>
-                        <h4 className="text-white font-semibold mb-6">Resources</h4>
+                        <h4 className="text-white text-[10px] font-bold tracking-widest uppercase mb-6">API & Auth</h4>
                         <div className="flex flex-col space-y-4">
-                            <a href="#features" className="text-gray-400 hover:text-white transition-colors text-sm">
-                                Features
+                            <a href="#features" className="text-[#919191] text-[11px] font-medium tracking-widest uppercase hover:text-[#3B82F6] transition-none">
+                                Capabilities
                             </a>
-                            <a href="#how-it-works" className="text-gray-400 hover:text-white transition-colors text-sm">
-                                How It Works
+                            <a href="#how-it-works" className="text-[#919191] text-[11px] font-medium tracking-widest uppercase hover:text-[#3B82F6] transition-none">
+                                Mechanism
                             </a>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
-                                API Docs
+                            <a href="#" className="text-[#919191] text-[11px] font-medium tracking-widest uppercase hover:text-[#3B82F6] transition-none">
+                                API Access
                             </a>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
-                                Privacy Policy
+                            <a href="#" className="text--[#919191] text-[11px] font-medium tracking-widest uppercase hover:text-[#3B82F6] transition-none">
+                                Security
                             </a>
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-gray-500 text-sm">
-                        © {new Date().getFullYear()} XAI Classifier. All rights reserved.
+                <div className="border-t border-[#1E293B] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p className="text-[#475569] text-[10px] tracking-widest uppercase font-bold">
+                        © {new Date().getFullYear()} AI Research Division. All parameters secured.
                     </p>
                 </div>
             </div>

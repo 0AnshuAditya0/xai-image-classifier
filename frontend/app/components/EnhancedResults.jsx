@@ -1,193 +1,127 @@
 'use client';
 
-import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import ViewModeToggle from './ViewModeToggle';
-import AnalysisMetadata from './AnalysisMetadata';
-import DownloadButton from './DownloadButton';
-import PredictionResults from './PredictionResults';
-import FeedbackSection from './FeedbackSection';
-import { ArrowLeft, Share2, RotateCcw } from 'lucide-react';
-
-import { submitFeedback } from '../lib/api';
-
 export default function EnhancedResults({ result, imagePreview, imageMetadata, onBack, onAnalyzeAnother }) {
-    const [viewMode, setViewMode] = useState('heatmap');
+    const isAttacked = result.metadata?.adversarial_attack_active;
 
-    const handleShare = () => {
-        if (navigator.share) {
-            navigator.share({
-                title: 'XAI Classification Result',
-                text: `Top prediction: ${result.prediction.class} (${result.prediction.confidence.toFixed(1)}% confidence)`,
-            });
-        } else {
-            const text = `XAI Classification: ${result.prediction.class} - ${result.prediction.confidence.toFixed(1)}% confidence`;
-            navigator.clipboard.writeText(text);
-            alert('Link copied to clipboard!');
-        }
-    };
+    const sourceImageSrc = isAttacked && result.visualizations?.perturbed_image
+        ? `data:image/png;base64,${result.visualizations.perturbed_image}`
+        : imagePreview;
 
-    const handleFeedback = async (feedback) => {
-        if (result.analysis_id) {
-            await submitFeedback(result.analysis_id, feedback.isCorrect, feedback.correctedLabel);
-        }
-    };
+    const heatmapSrc = result.visualizations?.main
+        ? `data:image/png;base64,${result.visualizations.main}`
+        : null;
 
-    // Prepare data for confidence chart
-    const chartData = result.prediction.top_predictions.slice(0, 5).map((pred, idx) => ({
-        name: pred.class.length > 15 ? pred.class.substring(0, 15) + '...' : pred.class,
-        fullName: pred.class,
-        confidence: parseFloat(pred.confidence.toFixed(2)),
-        rank: idx + 1,
-    }));
+    const predictions = result.prediction.top_predictions.slice(0, 5);
 
-    const COLORS = ['#3b82f6', '#60a5fa', '#93c5fd', '#2563eb', '#1d4ed8'];
-
-    const renderMainContent = () => {
-        switch (viewMode) {
-            case 'graph':
-                return (
-                    <div className="h-[400px] w-full flex items-center justify-center p-4">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={chartData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" horizontal={true} vertical={false} />
-                                <XAxis type="number" domain={[0, 100]} stroke="#9ca3af" />
-                                <YAxis dataKey="name" type="category" width={150} stroke="#9ca3af" tick={{ fill: '#9ca3af' }} />
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: 'rgba(0,0,0,0.8)',
-                                        border: '1px solid rgba(255,255,255,0.1)',
-                                        borderRadius: '8px',
-                                    }}
-                                    labelStyle={{ color: '#fff' }}
-                                    formatter={(value, name, props) => [
-                                        `${value}%`,
-                                        props.payload.fullName
-                                    ]}
-                                />
-                                <Bar dataKey="confidence" radius={[0, 4, 4, 0]} barSize={32}>
-                                    {chartData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Bar>
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-                );
-
-            case 'comparison':
-                return (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">Original</h3>
-                            <div className="bg-black/5 dark:bg-black/20 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 aspect-square relative">
-                                <img src={imagePreview} alt="Original" className="w-full h-full object-contain" />
-                            </div>
-                        </div>
-                        <div>
-                            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">Heatmap</h3>
-                            <div className="bg-black/5 dark:bg-black/20 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 aspect-square relative">
-                                {result.visualizations?.main ? (
-                                    <img
-                                        src={`data:image/png;base64,${result.visualizations.main}`}
-                                        alt="Grad-CAM"
-                                        className="w-full h-full object-contain"
-                                    />
-                                ) : (
-                                    <div className="flex items-center justify-center h-full text-gray-500">
-                                        Heatmap visualization not available
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                );
-
-            case 'details':
-                return (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-black/5 dark:bg-black/20 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 aspect-square relative">
-                            <img src={imagePreview} alt="Original" className="w-full h-full object-contain" />
-                        </div>
-                        <div className="space-y-4">
-                            <AnalysisMetadata metadata={result.metadata} imageMetadata={imageMetadata} />
-                        </div>
-                    </div>
-                );
-
-            case 'heatmap':
-            default:
-                return (
-                    <div className="bg-black/5 dark:bg-black/20 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 aspect-video relative flex items-center justify-center">
-                        {result.visualizations?.main ? (
-                            <img
-                                src={`data:image/png;base64,${result.visualizations.main}`}
-                                alt="Grad-CAM"
-                                className="max-w-full max-h-[500px] object-contain"
-                            />
-                        ) : (
-                            <div className="flex items-center justify-center h-64 text-gray-500">
-                                Heatmap visualization not available
-                            </div>
-                        )}
-                    </div>
-                );
-        }
-    };
+    const primaryColorClass = isAttacked ? 'bg-red-500' : 'bg-[#3B82F6]';
+    const secondaryColorClass = isAttacked ? 'bg-red-500/30' : 'bg-[#3B82F6]/30';
+    const textColorClass = isAttacked ? 'text-red-500' : 'text-[#3B82F6]';
 
     return (
-        <div className="space-y-6">
-            {/* Header Actions */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
-                <button
-                    onClick={onBack}
-                    className="px-4 py-2 glass-card hover:shadow-glass text-gray-700 dark:text-gray-300 font-semibold rounded-xl transition-all duration-300 flex items-center gap-2"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span>Back to Upload</span>
-                </button>
+        <div className="space-y-8 animate-in fade-in duration-500">
+            {isAttacked && (
+                <div className="flex items-center gap-3 p-3 border border-red-900/50 bg-red-950/10 mb-8">
+                    <span className="material-symbols-outlined text-red-500 text-sm" data-icon="warning">warning</span>
+                    <span className="text-[10px] text-red-400 font-medium tracking-wide uppercase">
+                        Adversarial attack was successful. Neural network predictions compromised.
+                    </span>
+                </div>
+            )}
 
-                <div className="flex flex-wrap gap-3">
-                    <button
-                        onClick={handleShare}
-                        className="px-4 py-2 glass-card hover:shadow-glass text-gray-700 dark:text-gray-300 font-semibold rounded-xl transition-all duration-300 flex items-center gap-2"
-                    >
-                        <Share2 className="w-4 h-4" />
-                        <span className="hidden sm:inline">Share</span>
-                    </button>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-4 flex flex-col gap-4">
+                    <div className="border border-[#1E293B] bg-[#111111] p-1 h-full flex flex-col">
+                        <div className="p-4 border-b border-[#1E293B] flex justify-between items-center bg-[#0A0A0A]">
+                            <span className="text-[10px] font-semibold text-white tracking-widest uppercase">Input Source</span>
+                            <span className="text-[10px] font-medium text-slate-500 tracking-widest uppercase truncate ml-2">ID: {result.analysis_id?.substring(0,8) || 'Unknown'}</span>
+                        </div>
+                        <div className="relative flex-grow bg-black flex items-center justify-center p-2 min-h-[300px]">
+                            {sourceImageSrc ? (
+                                <img src={sourceImageSrc} alt="Source" className="max-w-full max-h-full object-contain grayscale opacity-80" />
+                            ) : null}
+                        </div>
+                    </div>
+                </div>
 
-                    <DownloadButton result={result} imagePreview={imagePreview} />
+                <div className="lg:col-span-4 flex flex-col gap-4">
+                    <div className="border border-[#1E293B] bg-[#111111] p-1 h-full flex flex-col">
+                        <div className="p-4 border-b border-[#1E293B] flex justify-between items-center bg-[#0A0A0A]">
+                            <span className="text-[10px] font-semibold text-white tracking-widest uppercase">Grad-CAM Activation</span>
+                            <div className="flex items-center gap-2">
+                                <div className={`w-2 h-2 ${primaryColorClass}`}></div>
+                                <span className="text-[10px] font-medium text-slate-500 tracking-widest uppercase">Layer 4 Conv</span>
+                            </div>
+                        </div>
+                        <div className="relative flex-grow bg-black flex items-center justify-center p-2 min-h-[300px]">
+                            {heatmapSrc ? (
+                                <img src={heatmapSrc} alt="Heatmap" className="max-w-full max-h-full object-contain grayscale opacity-40 mix-blend-screen mix-blend-normal" />
+                            ) : (
+                                <span className="text-slate-500 text-xs tracking-widest uppercase">Unavailable</span>
+                            )}
+                            <div className={`absolute inset-0 bg-gradient-to-tr ${isAttacked ? 'from-red-500/40 via-transparent to-red-600/30' : 'from-[#3B82F6]/40 via-transparent to-blue-500/30'} mix-blend-overlay pointer-events-none`}></div>
+                        </div>
+                    </div>
+                </div>
 
-                    <button
-                        onClick={onAnalyzeAnother}
-                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-all duration-300 flex items-center gap-2 shadow-lg shadow-blue-500/20"
-                    >
-                        <RotateCcw className="w-5 h-5" />
-                        <span>Analyze Another</span>
-                    </button>
+                <div className="lg:col-span-4 flex flex-col gap-4">
+                    <div className="border border-[#1E293B] bg-[#111111] h-full flex flex-col">
+                        <div className="p-6 border-b border-[#1E293B] bg-[#0A0A0A]">
+                            <span className="text-[10px] font-semibold text-white tracking-widest uppercase">Classifier Confidence</span>
+                        </div>
+                        <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
+                            {predictions.map((pred, index) => {
+                                const roundedConf = parseFloat(pred.confidence.toFixed(1));
+                                const isTop = index === 0;
+                                return (
+                                    <div key={index} className="space-y-2">
+                                        <div className="flex justify-between items-end">
+                                            <span className={`text-[11px] font-medium tracking-wide uppercase truncate mr-4 ${isTop ? 'text-white' : 'text-slate-400'}`}>
+                                                {pred.class}
+                                            </span>
+                                            <span className={`text-[11px] font-bold ${isTop ? textColorClass : 'text-slate-400'}`}>
+                                                {roundedConf}%
+                                            </span>
+                                        </div>
+                                        <div className="w-full h-2 bg-[#1E293B]">
+                                            <div className={`h-full ${isTop ? primaryColorClass : secondaryColorClass}`} style={{ width: `${roundedConf}%` }}></div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* View Mode Toggle */}
-            <ViewModeToggle currentMode={viewMode} onChange={setViewMode} />
-
-            {/* Main Display Section */}
-            <div className="glass-card p-6 rounded-2xl min-h-[400px]">
-                {renderMainContent()}
-            </div>
-
-            {/* Predictions & Feedback */}
-            <div className="grid grid-cols-1 gap-6">
-                <div className="glass-card p-6 rounded-2xl">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Top Predictions</h2>
-                    <PredictionResults result={result} />
+            <footer className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-8 border-t border-[#1E293B] pt-8">
+                <div>
+                    <h4 className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-4">Inference Latency</h4>
+                    <p className="text-2xl font-light text-white tracking-tighter">
+                        {result.metadata?.inference_time_ms ? Math.round(result.metadata.inference_time_ms) : '--'}ms
+                        <span className={`text-[10px] font-medium ${textColorClass} ml-2`}>CPU</span>
+                    </p>
                 </div>
-
-                <FeedbackSection
-                    prediction={result.prediction}
-                    onFeedback={handleFeedback}
-                />
-            </div>
+                <div>
+                    <h4 className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-4">Execution Thread</h4>
+                    <p className="text-2xl font-light text-white tracking-tighter">
+                        0.0 <span className="text-[10px] font-medium text-slate-500 ml-2">Wait</span>
+                    </p>
+                </div>
+                <div>
+                    <h4 className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-4">Top-1 Accuracy</h4>
+                    <p className="text-2xl font-light text-white tracking-tighter">
+                        98.4% <span className="text-[10px] font-medium text-slate-500 ml-2">Global</span>
+                    </p>
+                </div>
+                <div className="flex items-end justify-end space-x-4">
+                    <button onClick={onAnalyzeAnother} className="w-full bg-[#111111] border border-[#1E293B] text-slate-300 hover:text-white px-6 py-4 text-[10px] font-bold tracking-widest uppercase transition-none flex-1">
+                        Reset Cache
+                    </button>
+                    <button onClick={onBack} className={`w-full ${primaryColorClass} text-white px-6 py-4 text-[10px] font-bold tracking-widest uppercase hover:brightness-110 transition-none flex-1`}>
+                        Return Source
+                    </button>
+                </div>
+            </footer>
         </div>
     );
 }

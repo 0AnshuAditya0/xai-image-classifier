@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 10%;
+    --foreground: 0 0% 100%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
   }
 }
 
@@ -21,56 +21,49 @@
 }
 
 body {
-  @apply bg-light-bg dark:bg-dark-bg text-gray-900 dark:text-white transition-colors duration-300;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  @apply bg-[#0A0A0A] text-white transition-colors duration-0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Focus styles */
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  outline: 1px solid #3b82f6;
+  outline-offset: 1px;
 }
 
-/* Glassmorphism utilities */
 .glass {
-  @apply bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10;
+  @apply bg-[#111111] border border-[#1E293B] rounded-none;
 }
 
 .glass-card {
-  @apply bg-white/80 dark:bg-white/5 backdrop-blur-md border border-gray-200/50 dark:border-white/10;
+  @apply bg-[#111111] border border-[#1E293B] rounded-none;
 }
 
-/* Gradient text */
 .gradient-text {
-  @apply bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent;
+  @apply text-white;
 }
 
-/* Smooth transitions */
 .transition-smooth {
-  @apply transition-all duration-300 ease-in-out;
+  @apply transition-none;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-900;
+  @apply bg-[#0A0A0A];
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+  @apply bg-[#1E293B] rounded-none;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400 dark:bg-gray-600;
+  @apply bg-[#3B82F6];
 }

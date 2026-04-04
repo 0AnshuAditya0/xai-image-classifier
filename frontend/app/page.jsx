@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Zap, Upload, Eye, ArrowRight, Layers, Shield, BarChart3, Grid } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
@@ -11,62 +10,60 @@ export default function Home() {
     const [showAuthModal, setShowAuthModal] = useState(false);
 
     return (
-        <div className="min-h-screen bg-white dark:bg-[#0f172a] text-gray-900 dark:text-white font-sans selection:bg-blue-500/30 transition-colors duration-300">
+        <div className="min-h-screen bg-[#0A0A0A] text-white font-body selection:bg-[#3B82F6] selection:text-white transition-none overflow-x-hidden">
             <Navbar onAuthClick={() => setShowAuthModal(true)} />
             <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
 
-            {/* Hero Section */}
-            <section className="pt-32 pb-20 px-4 relative overflow-hidden">
-                <div className="max-w-7xl mx-auto relative z-10">
+            <section className="pt-32 pb-20 px-8 relative overflow-hidden">
+                <div className="absolute top-16 left-0 w-full h-[1px] bg-[#3B82F6] opacity-30 z-10 pointer-events-none shadow-[0_0_10px_#3B82F6]"></div>
+
+                <div className="max-w-7xl mx-auto relative z-10 border border-[#1E293B] bg-[#111111] p-12 lg:p-24">
                     <div className="flex flex-col lg:flex-row items-center gap-12">
-                        {/* Left Content */}
                         <div className="w-full lg:w-1/2 text-left">
-                            {/* Tagline */}
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50/50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500/20 rounded-full mb-8">
-                                <Zap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                                <span className="text-sm font-medium text-blue-600 dark:text-blue-400">Powered by ResNet52 + Grad-CAM</span>
+                            <div className="inline-flex items-center px-2 py-1 border border-[#3B82F6] bg-[#3B82F6]/5 mb-8">
+                                <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">Powered by ResNet152 + Grad-CAM</span>
                             </div>
 
-                            <h1 className="text-5xl md:text-7xl font-semibold mb-6 tracking-tight leading-tight text-gray-900 dark:text-white">
-                                AI-Powered Image<br />
-                                Classification
+                            <h1 className="text-5xl md:text-7xl font-semibold mb-6 tracking-tight leading-none text-white uppercase">
+                                AI-Powered Image<br />Classification.
                             </h1>
 
-                            <p className="text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-xl leading-relaxed font-normal">
+                            <p className="text-[#919191] text-[11px] uppercase tracking-widest mb-10 max-w-xl leading-loose">
                                 Upload any image and get instant predictions with explainable AI visualizations.
-                                See exactly what the AI is looking at with Grad-CAM heatmaps.
+                                See exactly what the AI is analyzing with dynamic Grad-CAM heatmaps.
                             </p>
 
-                            <div className="flex flex-col sm:flex-row gap-6 items-start">
+                            <div className="flex flex-col sm:flex-row gap-4 items-start">
                                 <Link
                                     href="/classifier"
-                                    className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg rounded-md transition-all duration-300 flex items-center gap-2 shadow-lg shadow-blue-500/20"
+                                    className="px-8 py-4 bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold text-[11px] tracking-widest uppercase transition-none flex items-center gap-2"
                                 >
-                                    Try It Now
-                                    <ArrowRight className="w-5 h-5" />
+                                    ANALYZE IMAGE
+                                    <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                                 </Link>
                                 <button
                                     onClick={() => document.getElementById('how-it-works').scrollIntoView({ behavior: 'smooth' })}
-                                    className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white font-medium transition-colors px-6 py-4"
+                                    className="px-8 py-4 bg-[#0A0A0A] border border-[#1E293B] hover:border-[#3B82F6] text-[#919191] hover:text-white flex items-center gap-2 font-bold transition-none tracking-widest uppercase text-[11px]"
                                 >
-                                    <Eye className="w-5 h-5" />
-                                    <span>View Demo</span>
+                                    <span className="material-symbols-outlined text-[16px]">visibility</span>
+                                    <span>VIEW INFORMATION</span>
                                 </button>
                             </div>
                         </div>
 
-                        {/* Right Image - Brighter in light mode */}
                         <div className="w-full lg:w-1/2 flex justify-center lg:justify-end relative">
-                            <div className="relative w-full max-w-2xl">
-                                <div className="relative">
-                                    <img
-                                        src="/mundophone.jpeg"
-                                        alt="AI Visualization"
-                                        className="w-full h-auto object-cover opacity-100 dark:opacity-90 mix-blend-normal dark:mix-blend-lighten transition-all duration-300 brightness-110 dark:brightness-100"
-                                    />
-                                    {/* Minimal gradient for edge blending only */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/40 dark:from-[#0f172a] dark:via-transparent dark:to-[#0f172a] pointer-events-none"></div>
-                                    <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent dark:from-[#0f172a] dark:via-transparent dark:to-transparent pointer-events-none"></div>
+                            <div className="relative w-full border border-[#1E293B] bg-[#0A0A0A] p-2">
+                                <div className="absolute top-0 right-0 p-2 bg-[#111111] border-b border-l border-[#1E293B] z-20">
+                                    <span className="text-[10px] text-[#919191] tracking-widest uppercase font-bold">XAI.DEMO.V1</span>
+                                </div>
+                                <img
+                                    src="/mundophone.jpeg"
+                                    alt="AI Visualization"
+                                    className="w-full h-auto object-cover grayscale opacity-80 mix-blend-screen"
+                                />
+                                <div className="absolute inset-0 bg-[#0A0A0A]/40 mix-blend-overlay pointer-events-none"></div>
+                                <div className="absolute bottom-4 left-4 border border-[#3B82F6]/50 bg-[#3B82F6]/10 px-3 py-1 backdrop-blur-sm shadow-[0_0_15px_#3B82F6_inset]">
+                                    <p className="text-[10px] font-bold tracking-widest text-[#3B82F6] uppercase m-0">CAM Activation Detected</p>
                                 </div>
                             </div>
                         </div>
@@ -74,163 +71,144 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Stats Section */}
-            <section className="py-12 px-4 bg-gray-50 dark:bg-[#0f172a]">
+            <section className="py-12 px-8 bg-[#0A0A0A]">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="bg-white dark:bg-slate-800 p-10 border-l-4 border-blue-500 flex flex-col items-center justify-center text-center h-48 shadow-sm dark:shadow-none transition-colors duration-300">
-                            <div className="text-5xl font-bold text-gray-900 dark:text-white mb-2">82.3%</div>
-                            <div className="text-gray-500 dark:text-gray-400 font-medium">Top-1 Accuracy</div>
+                        <div className="bg-[#111111] p-10 border border-[#1E293B] border-l-4 border-l-[#3B82F6] flex flex-col items-start justify-center h-48 transition-none hover:bg-[#1A1A1A]">
+                            <div className="text-5xl font-light tracking-tighter text-white mb-2">82.3%</div>
+                            <div className="text-[#919191] text-[10px] font-bold tracking-widest uppercase">Top-1 Accuracy</div>
                         </div>
-                        <div className="bg-white dark:bg-slate-800 p-10 border-l-4 border-blue-500 flex flex-col items-center justify-center text-center h-48 shadow-sm dark:shadow-none transition-colors duration-300">
-                            <div className="text-5xl font-bold text-gray-900 dark:text-white mb-2">1000</div>
-                            <div className="text-gray-500 dark:text-gray-400 font-medium">Object Categories</div>
+                        <div className="bg-[#111111] p-10 border border-[#1E293B] border-l-4 border-l-[#3B82F6] flex flex-col items-start justify-center h-48 transition-none hover:bg-[#1A1A1A]">
+                            <div className="text-5xl font-light tracking-tighter text-white mb-2">1000</div>
+                            <div className="text-[#919191] text-[10px] font-bold tracking-widest uppercase">Object Categories</div>
                         </div>
-                        <div className="bg-white dark:bg-slate-800 p-10 border-l-4 border-blue-500 flex flex-col items-center justify-center text-center h-48 shadow-sm dark:shadow-none transition-colors duration-300">
-                            <div className="text-5xl font-bold text-gray-900 dark:text-white mb-2">60M</div>
-                            <div className="text-gray-500 dark:text-gray-400 font-medium">Model Parameters</div>
+                        <div className="bg-[#111111] p-10 border border-[#1E293B] border-l-4 border-l-[#3B82F6] flex flex-col items-start justify-center h-48 transition-none hover:bg-[#1A1A1A]">
+                            <div className="text-5xl font-light tracking-tighter text-white mb-2">60M</div>
+                            <div className="text-[#919191] text-[10px] font-bold tracking-widest uppercase">Model Parameters</div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section id="features" className="py-24 px-4 bg-white dark:bg-[#0f172a] transition-colors duration-300">
+            <section id="features" className="py-24 px-8 bg-[#0A0A0A]">
                 <div className="max-w-7xl mx-auto">
-                    <div className="mb-16">
-                        <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-                            Core Features
+                    <div className="mb-16 border-l-2 border-[#3B82F6] pl-6">
+                        <h2 className="text-4xl font-semibold mb-4 text-white uppercase tracking-tight">
+                            Core Capabilities
                         </h2>
-                        <p className="text-lg text-gray-600 dark:text-gray-400">
+                        <p className="text-[11px] text-[#919191] uppercase tracking-widest">
                             Professional tools for transparent AI classification
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {/* Feature 1 */}
-                        <div className="bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/5 p-8 hover:bg-white dark:hover:bg-slate-800 transition-all duration-300 hover:shadow-lg dark:hover:shadow-none">
-                            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
-                                <Zap className="w-6 h-6 text-blue-600 dark:text-blue-500" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
+                        <div className="bg-[#111111] border border-[#1E293B] p-8 hover:border-[#3B82F6] transition-none group">
+                            <span className="material-symbols-outlined text-[24px] text-[#3B82F6] mb-6 block">bolt</span>
+                            <h3 className="text-[14px] font-bold mb-3 text-white uppercase tracking-widest">
                                 Fast Analysis
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                                GPU-accelerated processing for instant results
+                            <p className="text-[#919191] text-[10px] uppercase tracking-widest leading-loose">
+                                GPU-accelerated processing for instant results across robust architectures
                             </p>
                         </div>
 
-                        {/* Feature 2 */}
-                        <div className="bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/5 p-8 hover:bg-white dark:hover:bg-slate-800 transition-all duration-300 hover:shadow-lg dark:hover:shadow-none">
-                            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
-                                <Grid className="w-6 h-6 text-blue-600 dark:text-blue-500" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
+                        <div className="bg-[#111111] border border-[#1E293B] p-8 hover:border-[#3B82F6] transition-none group">
+                            <span className="material-symbols-outlined text-[24px] text-[#3B82F6] mb-6 block">grid_4x4</span>
+                            <h3 className="text-[14px] font-bold mb-3 text-white uppercase tracking-widest">
                                 1000 Categories
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                                ImageNet classes for comprehensive classification
+                            <p className="text-[#919191] text-[10px] uppercase tracking-widest leading-loose">
+                                ImageNet mapping enabling vast comprehensive classification parameters
                             </p>
                         </div>
 
-                        {/* Feature 3 */}
-                        <div className="bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/5 p-8 hover:bg-white dark:hover:bg-slate-800 transition-all duration-300 hover:shadow-lg dark:hover:shadow-none">
-                            <div className="w-12 h-12 bg-orange-100 dark:bg-orange-500/10 rounded-lg flex items-center justify-center mb-6">
-                                <Eye className="w-6 h-6 text-orange-600 dark:text-orange-500" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
+                        <div className="bg-[#111111] border border-[#1E293B] p-8 hover:border-[#3B82F6] transition-none group">
+                            <span className="material-symbols-outlined text-[24px] text-orange-500 mb-6 block">visibility</span>
+                            <h3 className="text-[14px] font-bold mb-3 text-white uppercase tracking-widest">
                                 Explainable AI
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                                Grad-CAM heatmaps show what the AI sees
+                            <p className="text-[#919191] text-[10px] uppercase tracking-widest leading-loose">
+                                Grad-CAM topological heatmaps exposing visual cortex analysis
                             </p>
                         </div>
 
-                        {/* Feature 4 */}
-                        <div className="bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/5 p-8 hover:bg-white dark:hover:bg-slate-800 transition-all duration-300 hover:shadow-lg dark:hover:shadow-none">
-                            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-500/10 rounded-lg flex items-center justify-center mb-6">
-                                <Shield className="w-6 h-6 text-orange-600 dark:text-orange-500" />
-                            </div>
-                            <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
-                                Top 5 Results
+                        <div className="bg-[#111111] border border-[#1E293B] p-8 hover:border-[#3B82F6] transition-none group">
+                            <span className="material-symbols-outlined text-[24px] text-red-500 mb-6 block">security</span>
+                            <h3 className="text-[14px] font-bold mb-3 text-white uppercase tracking-widest">
+                                Adversarial Metrics
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                                Confidence scores for accurate predictions
+                            <p className="text-[#919191] text-[10px] uppercase tracking-widest leading-loose">
+                                Live FGSM vulnerability testing and threat simulations mapped instantly
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* How It Works Section */}
-            <section id="how-it-works" className="py-24 px-4 bg-gray-50 dark:bg-[#0f172a] transition-colors duration-300">
-                <div className="max-w-7xl mx-auto">
-                    <div className="mb-16">
-                        <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-                            How it works
+            <section id="how-it-works" className="py-24 px-8 bg-[#0A0A0A]">
+                <div className="max-w-7xl mx-auto border border-[#1E293B] bg-[#111111] p-12 lg:p-24">
+                    <div className="mb-16 border-l-2 border-[#3B82F6] pl-6">
+                        <h2 className="text-4xl font-semibold mb-4 text-white uppercase tracking-tight">
+                            System Information
                         </h2>
-                        <p className="text-lg text-gray-600 dark:text-gray-400">
-                            Three simple steps to understand your images
+                        <p className="text-[11px] text-[#919191] uppercase tracking-widest">
+                            Execution thread pipeline from input to inference
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                        {/* Step 1 */}
-                        <div>
-                            <div className="w-16 h-16 bg-blue-600 dark:bg-blue-500 rounded flex items-center justify-center mb-6 text-2xl font-bold text-white shadow-lg shadow-blue-500/20 dark:shadow-none">
-                                1
+                        <div className="border border-[#1E293B] p-6 bg-[#0A0A0A] relative">
+                            <div className="absolute -top-4 -left-4 w-8 h-8 bg-[#3B82F6] flex items-center justify-center font-bold text-[10px] tracking-widest text-[#0A0A0A]">
+                                01
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
-                                Upload Image
+                            <h3 className="text-[12px] font-bold mb-3 text-white mt-4 uppercase tracking-widest">
+                                Input Sector
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                                Drop any JPG, PNG, or WebP image file
+                            <p className="text-[#919191] text-[10px] uppercase tracking-widest leading-loose">
+                                Inject standard neural formats (JPG, PNG, WEBP) directly into the API conduit.
                             </p>
                         </div>
 
-                        {/* Step 2 */}
-                        <div>
-                            <div className="w-16 h-16 bg-blue-400 rounded flex items-center justify-center mb-6 text-2xl font-bold text-white shadow-lg shadow-blue-400/20 dark:shadow-none">
-                                2
+                        <div className="border border-[#1E293B] p-6 bg-[#0A0A0A] relative">
+                            <div className="absolute -top-4 -left-4 w-8 h-8 bg-white flex items-center justify-center font-bold text-[10px] tracking-widest text-[#0A0A0A]">
+                                02
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
-                                AI Analysis
+                            <h3 className="text-[12px] font-bold mb-3 text-white mt-4 uppercase tracking-widest">
+                                Process Thread
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                                Our model processes and classifies your image
+                            <p className="text-[#919191] text-[10px] uppercase tracking-widest leading-loose">
+                                Model processes node layers. Optional adversarial corruption (FGSM) injected.
                             </p>
                         </div>
 
-                        {/* Step 3 */}
-                        <div>
-                            <div className="w-16 h-16 bg-orange-500 rounded flex items-center justify-center mb-6 text-2xl font-bold text-white shadow-lg shadow-orange-500/20 dark:shadow-none">
-                                3
+                        <div className="border border-[#1E293B] p-6 bg-[#0A0A0A] relative">
+                            <div className="absolute -top-4 -left-4 w-8 h-8 bg-orange-500 flex items-center justify-center font-bold text-[10px] tracking-widest text-[#0A0A0A]">
+                                03
                             </div>
-                            <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
-                                View Results
+                            <h3 className="text-[12px] font-bold mb-3 text-white mt-4 uppercase tracking-widest">
+                                Output Matrix
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                                Get predictions with visual explanations
+                            <p className="text-[#919191] text-[10px] uppercase tracking-widest leading-loose">
+                                Return deterministic confidence scores with topological visual explainability layers.
                             </p>
                         </div>
                     </div>
 
-                    {/* CTA */}
-                    <div className="mt-24 bg-blue-600 dark:bg-blue-500 p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 rounded-2xl shadow-xl dark:shadow-none">
+                    <div className="mt-24 border border-[#3B82F6] bg-[#3B82F6]/5 p-12 flex flex-col md:flex-row items-center justify-between gap-8 backdrop-blur-sm">
                         <div>
-                            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                                Ready to try it out?
+                            <h2 className="text-2xl font-semibold text-white mb-2 uppercase tracking-tight">
+                                Execute Terminal
                             </h2>
-                            <p className="text-blue-100 text-lg">
-                                Start classifying images with explainable AI today
+                            <p className="text-[11px] text-[#3B82F6] tracking-widest uppercase">
+                                Subsystem ready for image payload parsing
                             </p>
                         </div>
                         <Link
                             href="/classifier"
-                            className="px-8 py-4 bg-white text-blue-600 font-bold text-lg rounded-md hover:bg-gray-100 transition-colors flex items-center gap-2 whitespace-nowrap shadow-lg"
+                            className="px-8 py-4 bg-[#3B82F6] hover:bg-[#2563EB] text-white font-bold text-[11px] tracking-widest uppercase transition-none flex items-center gap-2"
                         >
-                            Get Started
-                            <ArrowRight className="w-5 h-5" />
+                            ANALYZE IMAGE
+                            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                         </Link>
                     </div>
                 </div>

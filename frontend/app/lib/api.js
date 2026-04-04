@@ -2,11 +2,14 @@ import axios from 'axios';
 
 const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:7860').replace('0.0.0.0', 'localhost');
 
-export async function classifyImage(file, userEmail = null) {
+export async function classifyImage(file, userEmail = null, enableAttack = false) {
   const formData = new FormData();
   formData.append('file', file);
   if (userEmail) {
     formData.append('user_email', userEmail);
+  }
+  if (enableAttack) {
+    formData.append('enable_attack', 'true');
   }
 
   try {
