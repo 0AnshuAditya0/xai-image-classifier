@@ -98,7 +98,7 @@ export default function ClassifierPage() {
                         XAI Classifier
                     </Link>
                     <div className="hidden md:flex gap-6">
-                        <span className="text-[#3B82F6] font-bold text-sm tracking-wide">Model: ResNet152</span>
+                        <span className="text-[#3B82F6] font-bold text-sm tracking-wide">Model: ResNet18</span>
                         <span className="text-[#919191] font-normal text-sm tracking-wide hover:text-white transition-none cursor-default">API: Connected</span>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ export default function ClassifierPage() {
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                             <div className="space-y-2">
                                 <div className="inline-flex items-center px-2 py-1 border border-[#3B82F6] bg-[#3B82F6]/5 mb-4">
-                                    <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">ResNet152 + Grad-CAM</span>
+                                    <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">ResNet18 + Grad-CAM</span>
                                 </div>
                                 <h1 className="text-5xl md:text-7xl font-semibold tracking-[-0.04em] text-white leading-tight">
                                     XAI Image <br/>Classification.

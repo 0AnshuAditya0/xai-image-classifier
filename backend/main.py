@@ -16,21 +16,17 @@ from model import ImageClassifier
 import models
 from database import engine, get_db
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Create database tables
 models.Base.metadata.create_all(bind=engine)
 
-# Initialize FastAPI app
 app = FastAPI(
     title="XAI Image Classifier API",
-    description="ResNet152 with Grad-CAM explainability",
-    version="2.0.0"
+    description="ResNet18 with Grad-CAM explainability (CIFAR-10)",
+    version="1.1.0"
 )
 
-# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -39,20 +35,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Ensure uploads directory exists
 UPLOAD_DIR = "uploads"
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
-# Mount uploads directory to serve images
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
-# Initialize model
 logger.info("Loading model...")
 classifier = ImageClassifier()
 logger.info("Model loaded successfully!")
 
-# Pydantic models for request/response
 class FeedbackRequest(BaseModel):
     analysis_id: int
     is_correct: bool
@@ -71,6 +63,7 @@ async def health_check():
 async def classify_image(
     file: UploadFile = File(...),
     user_email: Optional[str] = Form(None),
+    enable_attack: bool = Form(False),
     db: Session = Depends(get_db)
 ) -> JSONResponse:
     try:
@@ -80,26 +73,14 @@ async def classify_image(
         contents = await file.read()
         image = Image.open(io.BytesIO(contents)).convert("RGB")
         
-        # Save image if user is logged in
-        image_path = None
-        # User requested to NOT store images in history
-        # if user_email:
-        #     filename = f"{uuid.uuid4()}.jpg"
-        #     image_path = os.path.join(UPLOAD_DIR, filename)
-        #     image.save(image_path)
-        #     # Store relative path for serving
-        #     image_path = f"/uploads/{filename}"
-
-        # Run inference
         logger.info(f"Processing image: {file.filename}")
-        result = classifier.predict_and_explain(image)
+        result = classifier.predict_and_explain(image, enable_attack=enable_attack)
         
-        # Save analysis to DB if user is logged in
         analysis_id = None
         if user_email:
             db_analysis = models.Analysis(
                 user_email=user_email,
-                image_path="", # Empty string as we are not saving image
+                image_path="",
                 prediction=result["prediction"]["class"],
                 confidence=result["prediction"]["confidence"]
             )
@@ -109,6 +90,8 @@ async def classify_image(
             analysis_id = db_analysis.id
 
         def pil_to_base64(pil_image):
+            if pil_image is None:
+                return None
             buffered = io.BytesIO()
             pil_image.save(buffered, format="PNG")
             return base64.b64encode(buffered.getvalue()).decode()
@@ -122,13 +105,10 @@ async def classify_image(
             },
             "visualizations": {
                 "main": pil_to_base64(result["visualizations"]["main"]),
-                "detailed": pil_to_base64(result["visualizations"]["detailed"])
+                "detailed": pil_to_base64(result["visualizations"]["detailed"]),
+                "perturbed_image": pil_to_base64(result["visualizations"].get("perturbed_image"))
             },
-            "metadata": {
-                "model": "ResNet152",
-                "precision": result["metadata"]["precision"],
-                "device": result["metadata"]["device"]
-            }
+            "metadata": result["metadata"]
         }
         
         return JSONResponse(content=response)

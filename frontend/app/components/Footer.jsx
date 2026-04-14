@@ -14,7 +14,7 @@ export default function Footer() {
                             </Link>
                         </div>
                         <p className="text-[#919191] text-[11px] uppercase tracking-widest leading-loose max-w-md mb-8">
-                            AI-powered image classification with explainable AI visualizations. Built with ResNet152 and Grad-CAM for transparent, trustworthy decision-making.
+                            AI-powered image classification with explainable AI visualizations. Built with ResNet18 and Grad-CAM for transparent, trustworthy decision-making.
                         </p>
                         <div className="flex space-x-4">
                             <a

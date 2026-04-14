@@ -26,7 +26,7 @@ export default function AnalysisMetadata({ metadata, imageMetadata }) {
                     <span className="text-xs text-gray-600 dark:text-gray-400">Model</span>
                 </div>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">
-                    {metadata?.model || 'ResNet152'}
+                    {metadata?.model || 'ResNet18'}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
                     {metadata?.precision || 'FP16 (GPU)'}

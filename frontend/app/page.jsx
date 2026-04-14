@@ -21,7 +21,7 @@ export default function Home() {
                     <div className="flex flex-col lg:flex-row items-center gap-12">
                         <div className="w-full lg:w-1/2 text-left">
                             <div className="inline-flex items-center px-2 py-1 border border-[#3B82F6] bg-[#3B82F6]/5 mb-8">
-                                <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">Powered by ResNet152 + Grad-CAM</span>
+                                <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">Powered by ResNet18 + Grad-CAM</span>
                             </div>
 
                             <h1 className="text-5xl md:text-7xl font-semibold mb-6 tracking-tight leading-none text-white uppercase">
@@ -75,15 +75,15 @@ export default function Home() {
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="bg-[#111111] p-10 border border-[#1E293B] border-l-4 border-l-[#3B82F6] flex flex-col items-start justify-center h-48 transition-none hover:bg-[#1A1A1A]">
-                            <div className="text-5xl font-light tracking-tighter text-white mb-2">82.3%</div>
+                            <div className="text-5xl font-light tracking-tighter text-white mb-2">79.7%</div>
                             <div className="text-[#919191] text-[10px] font-bold tracking-widest uppercase">Top-1 Accuracy</div>
                         </div>
                         <div className="bg-[#111111] p-10 border border-[#1E293B] border-l-4 border-l-[#3B82F6] flex flex-col items-start justify-center h-48 transition-none hover:bg-[#1A1A1A]">
-                            <div className="text-5xl font-light tracking-tighter text-white mb-2">1000</div>
+                            <div className="text-5xl font-light tracking-tighter text-white mb-2">10</div>
                             <div className="text-[#919191] text-[10px] font-bold tracking-widest uppercase">Object Categories</div>
                         </div>
                         <div className="bg-[#111111] p-10 border border-[#1E293B] border-l-4 border-l-[#3B82F6] flex flex-col items-start justify-center h-48 transition-none hover:bg-[#1A1A1A]">
-                            <div className="text-5xl font-light tracking-tighter text-white mb-2">60M</div>
+                            <div className="text-5xl font-light tracking-tighter text-white mb-2">11.7M</div>
                             <div className="text-[#919191] text-[10px] font-bold tracking-widest uppercase">Model Parameters</div>
                         </div>
                     </div>
@@ -115,10 +115,10 @@ export default function Home() {
                         <div className="bg-[#111111] border border-[#1E293B] p-8 hover:border-[#3B82F6] transition-none group">
                             <span className="material-symbols-outlined text-[24px] text-[#3B82F6] mb-6 block">grid_4x4</span>
                             <h3 className="text-[14px] font-bold mb-3 text-white uppercase tracking-widest">
-                                1000 Categories
+                                10 Categories
                             </h3>
                             <p className="text-[#919191] text-[10px] uppercase tracking-widest leading-loose">
-                                ImageNet mapping enabling vast comprehensive classification parameters
+                                CIFAR-10 mapping enabling specific comprehensive classification parameters
                             </p>
                         </div>
 

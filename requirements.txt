@@ -5,3 +5,8 @@ captum
 Pillow
 matplotlib
 numpy
+fastapi
+uvicorn
+sqlalchemy
+pydantic-settings
+python-multipart
