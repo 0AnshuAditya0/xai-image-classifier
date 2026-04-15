@@ -12,7 +12,7 @@ import uuid
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
-from model import ImageClassifier
+from model import ImageAnalyzer
 import models
 from database import engine, get_db
 
@@ -22,8 +22,8 @@ logger = logging.getLogger(__name__)
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="XAI Image Classifier API",
-    description="ResNet18 with Grad-CAM explainability (CIFAR-10)",
+    title="Smart AI Classifier",
+    description="Easy image analysis with focus maps",
     version="1.1.0"
 )
 
@@ -41,9 +41,7 @@ if not os.path.exists(UPLOAD_DIR):
 
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
-logger.info("Loading model...")
-classifier = ImageClassifier()
-logger.info("Model loaded successfully!")
+analyzer = ImageAnalyzer()
 
 class FeedbackRequest(BaseModel):
     analysis_id: int
@@ -52,12 +50,12 @@ class FeedbackRequest(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"message": "XAI Image Classifier API", "status": "running"}
+    return {"message": "Smart AI Classifier API", "status": "running"}
 
 @app.get("/health")
 @app.head("/health")
 async def health_check():
-    return {"status": "healthy", "model_loaded": classifier.model is not None}
+    return {"status": "healthy", "model_ready": analyzer.model is not None}
 
 @app.post("/classify")
 async def classify_image(
@@ -68,13 +66,12 @@ async def classify_image(
 ) -> JSONResponse:
     try:
         if not file.content_type.startswith("image/"):
-            raise HTTPException(status_code=400, detail="File must be an image")
+            raise HTTPException(status_code=400, detail="Please upload an image")
         
         contents = await file.read()
         image = Image.open(io.BytesIO(contents)).convert("RGB")
         
-        logger.info(f"Processing image: {file.filename}")
-        result = classifier.predict_and_explain(image, enable_attack=enable_attack)
+        result = analyzer.analyze(image, test_stress=enable_attack)
         
         analysis_id = None
         if user_email:
@@ -114,8 +111,7 @@ async def classify_image(
         return JSONResponse(content=response)
         
     except Exception as e:
-        logger.error(f"Error processing image: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error processing image: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/feedback")
 async def submit_feedback(feedback: FeedbackRequest, db: Session = Depends(get_db)):
@@ -127,7 +123,7 @@ async def submit_feedback(feedback: FeedbackRequest, db: Session = Depends(get_d
         )
         db.add(db_feedback)
         db.commit()
-        return {"message": "Feedback received"}
+        return {"message": "Thanks for your feedback"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
