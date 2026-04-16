@@ -46,7 +46,7 @@ export default function PredictionResults({ result }) {
 
                 <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
                     <div className="px-3 py-1.5 bg-blue-500/10 border border-blue-500/30 text-blue-400">
-                        {metadata.ai_type || 'Smart AI'}
+                        {metadata.ai_type || 'XAI Engine'}
                     </div>
                     <div className="px-3 py-1.5 bg-purple-500/10 border border-purple-500/30 text-purple-400">
                         {metadata.engine || 'Active'}

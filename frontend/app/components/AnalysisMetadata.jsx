@@ -23,7 +23,7 @@ export default function AnalysisMetadata({ metadata, imageMetadata }) {
                     <span className="text-xs text-gray-600 dark:text-gray-400">AI Brain</span>
                 </div>
                 <p className="text-lg font-bold text-gray-900 dark:text-white">
-                    {metadata?.ai_type || 'Smart AI'}
+                    {metadata?.ai_type || 'XAI Core'}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
                     {metadata?.engine || 'Active'}
