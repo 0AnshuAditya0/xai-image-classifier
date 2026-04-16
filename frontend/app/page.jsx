@@ -21,11 +21,11 @@ export default function Home() {
                     <div className="flex flex-col lg:flex-row items-center gap-12">
                         <div className="w-full lg:w-1/2 text-left">
                             <div className="inline-flex items-center px-2 py-1 border border-[#3B82F6] bg-[#3B82F6]/5 mb-8">
-                                <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">Powered by Smart AI</span>
+                                <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">Powered by XAI Engine</span>
                             </div>
 
                             <h1 className="text-5xl md:text-7xl font-semibold mb-6 tracking-tight leading-none text-white uppercase">
-                                Simple AI Image<br />Analysis.
+                                XAI Image<br />Analysis.
                             </h1>
 
                             <p className="text-[#919191] text-[11px] uppercase tracking-widest mb-10 max-w-xl leading-loose">
@@ -54,7 +54,7 @@ export default function Home() {
                         <div className="w-full lg:w-1/2 flex justify-center lg:justify-end relative group">
                             <div className="relative w-full border border-[#1E293B] bg-[#0A0A0A] p-2 group-hover:border-[#3B82F6]/30 transition-all duration-700">
                                 <div className="absolute top-0 right-0 p-2 bg-[#111111] border-b border-l border-[#1E293B] z-20">
-                                    <span className="text-[10px] text-[#919191] tracking-widest uppercase font-bold">SMART.AI.V1</span>
+                                    <span className="text-[10px] text-[#919191] tracking-widest uppercase font-bold">XAI.V1</span>
                                 </div>
                                 <img
                                     src="/mundophone.jpeg"

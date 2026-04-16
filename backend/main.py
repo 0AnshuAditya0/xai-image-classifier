@@ -22,8 +22,8 @@ logger = logging.getLogger(__name__)
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Smart AI Classifier",
-    description="Easy image analysis with focus maps",
+    title="XAI Classifier",
+    description="Explainable image analysis with focus maps",
     version="1.1.0"
 )
 
@@ -50,7 +50,7 @@ class FeedbackRequest(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"message": "Smart AI Classifier API", "status": "running"}
+    return {"message": "XAI Classifier API", "status": "running"}
 
 @app.get("/health")
 @app.head("/health")

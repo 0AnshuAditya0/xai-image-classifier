@@ -95,10 +95,10 @@ export default function ClassifierPage() {
             <nav className="fixed top-0 w-full h-16 border-b border-[#1E293B] z-50 bg-[#0A0A0A] flex justify-between items-center px-8">
                 <div className="flex items-center gap-8">
                     <Link href="/" className="text-xl font-semibold tracking-tighter text-white uppercase flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        AI Classifier
+                        XAI Classifier
                     </Link>
                     <div className="hidden md:flex gap-6">
-                        <span className="text-[#3B82F6] font-bold text-sm tracking-wide">Brain: Smart AI</span>
+                        <span className="text-[#3B82F6] font-bold text-sm tracking-wide">Brain: XAI Core</span>
                         <span className="text-[#919191] font-normal text-sm tracking-wide hover:text-white transition-all cursor-default">System: Ready</span>
                     </div>
                 </div>
@@ -121,15 +121,15 @@ export default function ClassifierPage() {
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                             <div className="space-y-2">
                                 <div className="inline-flex items-center px-2 py-1 border border-[#3B82F6] bg-[#3B82F6]/5 mb-4">
-                                    <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">Smart AI + Focus Maps</span>
+                                    <span className="text-[10px] font-bold text-[#3B82F6] tracking-widest uppercase">XAI + Focus Maps</span>
                                 </div>
                                 <h1 className="text-5xl md:text-7xl font-semibold tracking-[-0.04em] text-white leading-tight">
-                                    Simple Image <br/>Analysis.
+                                    XAI Image <br/>Analysis.
                                 </h1>
                             </div>
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center justify-between p-4 bg-[#111111] border border-[#1E293B] min-w-[280px] hover:border-[#3B82F6]/50 transition-colors">
-                                    <span className="text-[11px] font-medium text-slate-400 tracking-wider uppercase">Enable AI Stress Test</span>
+                                    <span className="text-[11px] font-medium text-slate-400 tracking-wider uppercase">Enable XAI Stress Test</span>
                                     <div className="relative inline-block w-10 h-5 align-middle select-none">
                                         <input type="checkbox" className="sr-only" id="toggle" checked={enableAttack} onChange={() => setEnableAttack(!enableAttack)} />
                                         <label htmlFor="toggle" className={`block h-5 cursor-pointer transition-all ${enableAttack ? 'bg-red-600' : 'bg-[#1E293B]'}`}></label>

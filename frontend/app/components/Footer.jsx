@@ -81,7 +81,7 @@ export default function Footer() {
 
                 <div className="border-t border-[#1E293B] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-[#475569] text-[10px] tracking-widest uppercase font-bold">
-                        © {new Date().getFullYear()} AI Research Division. All parameters secured.
+                        © {new Date().getFullYear()} XAI Research Division. All parameters secured.
                     </p>
                 </div>
             </div>

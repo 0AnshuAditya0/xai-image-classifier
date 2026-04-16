@@ -1,6 +1,6 @@
 # XAI Image Classifier v2.0
 
-An explainable AI image classification web application powered by ResNet152 and Grad-CAM visualizations.
+An explainable AI (XAI) image classification web application powered by ResNet18 and Grad-CAM visualizations.
 
 ## 🌟 Features
 

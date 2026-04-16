@@ -46,10 +46,10 @@ export default function EnhancedResults({ result, imagePreview, imageMetadata, o
                 <div className="lg:col-span-4 flex flex-col gap-4">
                     <div className="border border-[#1E293B] bg-[#111111] p-1 h-full flex flex-col hover:border-[#3B82F6]/30 transition-colors duration-500">
                         <div className="p-4 border-b border-[#1E293B] flex justify-between items-center bg-[#0A0A0A]">
-                            <span className="text-[10px] font-bold text-white tracking-widest uppercase">AI Focus Map</span>
+                            <span className="text-[10px] font-bold text-white tracking-widest uppercase">XAI Focus Map</span>
                             <div className="flex items-center gap-2">
                                 <div className={`w-2 h-2 ${primaryColorClass} animate-pulse`}></div>
-                                <span className="text-[10px] font-medium text-slate-600 tracking-widest uppercase">AI Logic Map</span>
+                                <span className="text-[10px] font-medium text-slate-600 tracking-widest uppercase">XAI Logic Map</span>
                             </div>
                         </div>
                         <div className="relative flex-grow bg-black flex items-center justify-center p-2 min-h-[300px]">
@@ -66,7 +66,7 @@ export default function EnhancedResults({ result, imagePreview, imageMetadata, o
                 <div className="lg:col-span-4 flex flex-col gap-4">
                     <div className="border border-[#1E293B] bg-[#111111] h-full flex flex-col hover:border-[#3B82F6]/30 transition-colors duration-500">
                         <div className="p-6 border-b border-[#1E293B] bg-[#0A0A0A]">
-                            <span className="text-[10px] font-bold text-white tracking-widest uppercase">AI Results</span>
+                            <span className="text-[10px] font-bold text-white tracking-widest uppercase">XAI Results</span>
                         </div>
                         <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
                             {predictions.map((pred, index) => {

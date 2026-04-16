@@ -12,7 +12,7 @@ export default function Navbar({ onAuthClick }) {
         <nav className="fixed top-0 left-0 w-full h-16 border-b border-[#1E293B] z-50 bg-[#0A0A0A] flex justify-between items-center px-8 transition-all duration-300">
             <div className="flex items-center gap-8">
                 <Link href="/" className="text-xl font-black tracking-tighter text-white uppercase flex items-center gap-2 transition-all hover:text-[#3B82F6]">
-                    AI Classifier
+                    XAI Classifier
                 </Link>
                 <div className="hidden md:flex gap-6">
                     <Link href="/classifier" className="text-[#919191] font-bold text-[10px] tracking-widest hover:text-white transition-colors uppercase">
